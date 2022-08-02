@@ -12,9 +12,7 @@
 }
 
 .form {
-  border: 0.5px solid #ddd;
   border-radius: 5px;
-  box-shadow: 0px 0px 48px 0px #ccc;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -50,8 +48,8 @@
 
 .form-input {
   padding: 0.5rem;
-  border: 1px solid #222;
   border-radius: 2px;
+  border: 1px solid;
 }
 
 .form-radio {
@@ -68,8 +66,6 @@
 }
 
 .form-input-file {
-  border: 1px solid #000;
-  border-radius: 3px;
   cursor: pointer;
 }
 
