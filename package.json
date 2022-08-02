@@ -79,16 +79,18 @@
     "@testing-library/react": "^13.3.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "autoprefixer": "^10.4.8",
+    "cssnano": "^5.1.12",
     "husky": "^8.0.1",
     "postcss": "^8.4.14",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup-plugin-postcss": "^4.0.2",
+    "semantic-release": "^19.0.3",
     "size-limit": "^8.0.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
-    "typescript": "^3.9.10",
-    "semantic-release": "^19.0.3"
+    "typescript": "^3.9.10"
   },
   "publishConfig": {
     "access": "public"

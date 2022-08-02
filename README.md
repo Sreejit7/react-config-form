@@ -2,9 +2,9 @@
 
 <img width="944" alt="image" src="https://user-images.githubusercontent.com/52678249/177845405-f4292487-db1a-4223-b8a1-fafb1826a6a1.png">
 
-A lightweight form builder package for creating easy forms in React with just a config. The component removes all necessity to write long boilterplate for handling state, change & errors for any React form. Just pass in a **config**, and attach a **form submit handler**, and you're done!
+A lightweight form builder package for creating highly customizable and accessible forms in React just with a config. The component removes all necessity to write long boilterplate for handling state, change & errors for any React form. Just pass in a **config**, and attach a **form submit handler**, and you're done! Comes with the power of [TypeScript](https://www.typescriptlang.org/).
 
-[Visit the site](https://formbuildr.vercel.app)
+[**Visit the site**](https://formbuildr.vercel.app)
 
 ## Features
 
@@ -21,12 +21,15 @@ A lightweight form builder package for creating easy forms in React with just a 
 - Fully keyboard accessible & responsive.
 - A built in `SubmitButton` component for providing a custom form submit button easily.
 
-## How to install
+## Getting Started
 
 Install the package using:
 
 ```bash
-npm install --save-dev react-config-form
+# with npm
+npm install --save react-config-form
+# with yarn
+yarn add react-config-form
 ```
 
 ## Usage
@@ -40,6 +43,8 @@ import {
   FormInputConfig,
   FormSubmitState,
 } from "react-config-form";
+// This stylesheet contains the default styling for the form
+import 'react-config-form/dist/react-config-form.cjs.development.css';
 
 const LoginForm = () => {
   const loginFormConfig: FormInputConfig[] = [
@@ -66,8 +71,7 @@ const LoginForm = () => {
         config={loginFormConfig}
         formStyles={{
           backgroundColor: "#4cd8d3",
-          boxShadow: "none",
-          borderColor: "#1e014a",
+          border: "1px solid #1e014a",
         }}
         formHeader={
           <header>
@@ -84,6 +88,31 @@ const LoginForm = () => {
 const root = createRoot(document.getElementById("root")!);
 root.render(<LoginForm/>);
 ```
+
+### Styling the form
+You can customize the styles for a form in multiple ways:
+
+#### 1. Default styles
+You can choose to use the minimal default styles that come with this package, hence writing less css for your forms. *(One goal of this package is to make you write less code for your forms!)*. Just include this line in your form component:
+
+```jsx
+import 'react-config-form/dist/react-config-form.cjs.development.css';
+```
+
+#### 2. Use your own styles together with default styles
+Most times, you'll probably want to use custom styles for your form, but **not start from scratch** *([like these examples](https://formbuildr.vercel.app/examples))*. You can use both, the default styles and your custom styles, overriding some default styles through the [config](#config), [props](#form-props) or [global classnames](#global-classnames). *Global classnames are especially useful for re-using same styles for multiple or all forms across your app.*
+
+```jsx
+// Import stylesheets in this order
+import 'react-config-form/dist/react-config-form.cjs.development.css';
+import 'path-to-your-custom-css-1';
+import 'path-to-your-custom-css-2';
+// ... and so on.
+```
+**The ordering of the imports are important since you want to override the default styles with the custom ones.**
+
+#### 3. Custom styles
+If you just want to use your custom styles, you can create your own styles for a form through the [global classnames](#global-classnames) or by passing in custom classnames through the [config](#config) or [props](#form-props). **No need to import the default css.**
 
 ## Playground
 
@@ -120,7 +149,7 @@ netlify init
 
 ## Props
 
-### FormBuilder props
+### <a name="form-props"></a>FormBuilder props
 
 _Required props are marked with an asterisk(\*)_
 
@@ -145,7 +174,7 @@ _Required props are marked with an asterisk(\*)_
 
 ## Types
 
-### Config type
+### <a name="config"></a> Config type
 
 Each form input config object contains the following:
 
@@ -169,7 +198,7 @@ _Required properties are marked with an asterisk(\*)_
 | groupHeader  |                 `JSX Element`                 | A header element for a particular form group. <br/>[**This effectively makes dividing a form into multiple sections possible**].                                                                                       |
 | groupFooter  |                 `JSX Element`                 | A footer element for a particular form group.                                                                                                                                                                          |
 
-## Global classNames
+## <a name="global-classnames"></a>Global classNames
 
 Global classNames can be used inside your project to **style all forms globally across your app**. If you have a lot of forms, and want to apply common styles to each form, this will be much faster as opposed to having to add props for each form individually.
 Here goes the list of global classnames:
