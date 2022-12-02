@@ -1,0 +1,74 @@
+/* classnames for application form example */
+.application-header {
+  padding: 1rem 2rem;
+  background-color: #624d80;
+  color: #41cacb;
+  font-weight: 500;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+@media only screen and (max-width: 475px) {
+  .application-header {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
+
+.application-form {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.application-form-container {
+  padding: 0;
+}
+
+.application-form-group-header {
+  color: #1f014a;
+  font-weight: 700;
+  padding: 0.5rem 0;
+}
+
+.application-form-group-border-b {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #7d859f50;
+}
+
+.application-form-submit {
+  background-color: #1f014a;
+  color: #41cacb;
+  border-radius: 4px;
+  border: none;
+  padding: 8px 10px;
+  transition: 0.5s all ease;
+  font-weight: 600;
+  border: 1px solid #1f014a;
+}
+
+.application-btn-secondary {
+  width: 6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #c8cdd8;
+  color: #1f014a;
+}
+
+.application-form-submit:hover {
+  box-shadow: 0px 0px 16px 0px #624d80;
+}
+
+.application-form-input {
+  border: 2px solid #dfe4f0;
+  transition: 0.5s all ease;
+}
+
+.application-form-label {
+  color: #7d859f;
+  font-weight: 500;
+}
+
+.application-form-input:hover {
+  border-color: #c8cdd8;
+}

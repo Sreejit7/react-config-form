@@ -1,0 +1,53 @@
+import Meta from '../../../components/Meta.tsx';
+import InlineCode from '../../../components/InlineCode.tsx';
+import HighlightedText from '../../../components/HighlightedText.tsx';
+import Playground from '../../../components/Playground.tsx';
+
+export const meta = {
+  title: 'API Reference | SubmitButton',
+  desc: 'API reference for the SubmitButton component of react-config-form',
+  author: 'Sreejit De',
+};
+
+<Meta meta={meta} />
+
+# SubmitButton
+
+**\<SubmitButton />** is a simple button component for submitting the form. You can wrap a
+SubmitButton inside the [\<FormBuilder>](/api-reference/formbuilder) component like so:
+
+```tsx
+import { FormBuilder, SubmitButton } from 'react-config-form';
+
+const config = [...some config]
+
+const handleSubmit = (form) => {...some submit handler}
+
+<FormBuilder config ={config} onSubmit={handleSubmit}>
+  /* this is the important bit */
+  <SubmitButton text="text you wan't to display on the button" />
+</FormBuilder>
+```
+
+### Props
+
+Here's a list of all the props you can pass in to SubmitButton:
+
+- <HighlightedText text="text" showBackticks />:
+  <InlineCode text="string" /> - The button text. [By default, it'll show a 'Submit' text]
+- <HighlightedText text="position" showBackticks />:
+  <InlineCode text="left" /> or
+  <InlineCode text="middle" /> or
+  <InlineCode text="right" /> - The alignment for the submit button. [By default, it'll show up in the middle]
+- <HighlightedText text="submitClass" showBackticks />:
+  <InlineCode text="JSX Element" /> - A string that includes class(es) to be attached with the submit button.
+
+### Playground
+
+Here's a CodeSandbox playground, so you can play around with <InlineCode text="<SubmitButton>" />
+and all it's different props.
+
+<Playground
+  src="https://codesandbox.io/embed/submitbutton-pg-qlnng6?autoresize=1&fontsize=14&module=%2Fsrc%2FSubmitButtonPG.tsx&theme=dark"
+  title="submit-button-playground"
+/>
