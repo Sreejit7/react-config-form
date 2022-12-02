@@ -4,7 +4,7 @@
 
 A lightweight form builder package for creating highly customizable and accessible forms in React just with a config. The component removes all necessity to write long boilterplate for handling state, change & errors for any React form. Just pass in a **config**, and attach a **form submit handler**, and you're done! Comes with the power of [TypeScript](https://www.typescriptlang.org/).
 
-[**Visit the site**](https://formbuildr.vercel.app)
+[**Visit the site**](https://react-config-form.vercel.app)
 
 ## Features
 
@@ -90,17 +90,20 @@ root.render(<LoginForm/>);
 ```
 
 ### Styling the form
+
 You can customize the styles for a form in multiple ways:
 
 #### 1. Default styles
-You can choose to use the minimal default styles that come with this package, hence writing less css for your forms. *(One goal of this package is to make you write less code for your forms!)*. Just include this line in your form component:
+
+You can choose to use the minimal default styles that come with this package, hence writing less css for your forms. _(One goal of this package is to make you write less code for your forms!)_. Just include this line in your form component:
 
 ```jsx
 import 'react-config-form/dist/react-config-form.cjs.development.css';
 ```
 
 #### 2. Use your own styles together with default styles
-Most times, you'll probably want to use custom styles for your form, but **not start from scratch** *([like these examples](https://formbuildr.vercel.app/examples))*. You can use both, the default styles and your custom styles, overriding some default styles through the [config](#config), [props](#form-props) or [global classnames](#global-classnames). *Global classnames are especially useful for re-using same styles for multiple or all forms across your app.*
+
+Most times, you'll probably want to use custom styles for your form, but **not start from scratch** _([like these examples](https://formbuildr.vercel.app/examples))_. You can use both, the default styles and your custom styles, overriding some default styles through the [config](#config), [props](#form-props) or [global classnames](#global-classnames). _Global classnames are especially useful for re-using same styles for multiple or all forms across your app._
 
 ```jsx
 // Import stylesheets in this order
@@ -109,9 +112,11 @@ import 'path-to-your-custom-css-1';
 import 'path-to-your-custom-css-2';
 // ... and so on.
 ```
+
 **The ordering of the imports are important since you want to override the default styles with the custom ones.**
 
 #### 3. Custom styles
+
 If you just want to use your custom styles, you can create your own styles for a form through the [global classnames](#global-classnames) or by passing in custom classnames through the [config](#config) or [props](#form-props). **No need to import the default css.**
 
 ## Playground

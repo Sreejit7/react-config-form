@@ -1,0 +1,226 @@
+import Inlinecode from '../../components/Inlinecode.tsx';
+import HighlightedText from '../../components/HighlightedText.tsx';
+import Playground from '../../components/Playground.tsx';
+import Meta from '../../components/Meta.tsx';
+
+export const meta = {
+  title: 'Features | react-config-form',
+  desc:
+    'react-config-form comes packed with features for great developer experience, high customizability and control while creating forms',
+  author: 'Sreejit De',
+};
+
+<Meta meta={meta} />
+
+# Features
+
+**react-config-form** is created keeping features for great developer experience and high
+customizability in mind. The goal of this package is to make creating and dealing with forms
+in React easy by:
+
+1. Having to write minimal code for forms.
+2. Handling all the state & validation logic.
+3. Providing a way for easy form submission handling.
+
+without losing **control over how you want to customize** your forms.
+
+Let's take a look at some of the key features currently available:
+
+### Customizability
+
+#### Custom headers and footers
+
+You can pass in custom headers and footers for any form using react-config-form.
+
+For form headers, you can pass using the <Inlinecode text="formHeader"/> prop.
+For footers, you can wrap it inside the <Inlinecode text="<FormBuilder>"/> element.
+
+Here's an example:
+
+```tsx
+import { FormBuilder, SubmitButton } from 'react-config-form';
+
+<FormBuilder
+  config ={...some config}
+  onSubmit={...some submit handler}
+  formHeader={<CoolFormHeader />}
+>
+  <CoolFormFooter />
+</FormBuilder>
+
+/* The custom form headers & footers */
+const CoolFormHeader = () => {
+  return(
+    <header className="cool-form-header">
+      <h1>This is a cool form header!</h1>
+    </header>
+  );
+}
+
+const CoolFormFooter = () => {
+  return(
+    <>
+      <button type="submit">Submit</button>
+      <button type="button">Cancel</button>
+    </>
+  )
+}
+```
+
+#### Custom form and elements
+
+There are mainly two ways of customizing your form and elements:
+
+1. You can **customize all or a bunch of forms on your app** using global classnames
+   (<HighlightedText text="form" showBackticks />, <HighlightedText text="form-input" showBackticks /> etc).
+   Here's a list of all global classnames you can target, with their respective elements:
+
+   - <HighlightedText text="form" showBackticks />: The main form element.
+   - <HighlightedText
+       text="form-container"
+       showBackticks
+     />: The form container.
+   - <HighlightedText
+       text="form-group"
+       showBackticks
+     />: Each form group (A form group consists of the label & the input for each form field).
+   - <HighlightedText
+       text="form-group-{type}"
+       showBackticks
+     />: A dynamic classname for form group of a particular input type. [e.g: this will be
+     <Inlinecode text="form-group-text" /> for a text input].
+   - <HighlightedText text="form-input" showBackticks />: A form input element.
+   - <HighlightedText
+       text="form-label"
+       showBackticks
+     />: Label for each input in the form.
+   - <HighlightedText
+       text="form-required"
+       showBackticks
+     />: The asterisk element marking an input field as required.
+   - <HighlightedText
+       text="form-error"
+       showBackticks
+     />: The error text shown for required fields in the form that are still empty.
+
+   For example:
+
+   ```css
+   /* globals.css */
+
+   /* This would make all form-labels **bold** across your app */
+   .form-label {
+     font-weight: 'bold';
+   }
+   ```
+
+2. The second way is to **customize each form separately** using [props](/docs/api-reference/formbuilder#props)
+   and **config** for individual forms.
+
+   For example, let's say you have a form like this:
+
+   ```tsx
+   import { FormBuilder, SubmitButton } from 'react-config-form';
+   import 'my-form.css';
+
+   /* A custom form config */
+   const customFormConfig = [
+     {
+       label: 'Name',
+       type: 'text',
+       initialValue: '',
+       size: 'large',
+       className: 'my-form-input',
+       labelClass: 'my-form-label',
+       groupHeader: (
+         <span className="my-form-group-header">Basic Details</span>
+       ),
+     },
+     {
+       label: 'Email',
+       type: 'email',
+       initialValue: '',
+       size: 'large',
+       className: 'my-form-input',
+       labelClass: 'my-form-label',
+     },
+   ];
+
+   <FormBuilder
+      config ={customFormConfig}
+      onSubmit={...some submit handler}
+    >
+      <SubmitButton text="Submit this custom form" />
+    </FormBuilder>
+   ```
+
+   Then, you can write some custom css for styling your form:
+
+   ```css
+   /* my-form.css */
+
+   .my-form-input {
+     border-radius: 10px;
+   }
+
+   .my-form-label {
+     font-style: italic;
+   }
+
+   .my-form-group-header {
+     color: 'purple';
+   }
+   ```
+
+### Handling submission
+
+You can easily handle form submission by passing a callback function to the <Inlinecode text="onSubmit" />
+prop of [FormBuilder](/docs/api-reference/formbuilder). The callback function receives the
+**form submission state** as a parameter. (The submission state holds all form input labels
+and values as key-value pairs)
+
+Here's a simple example:
+
+```tsx
+import { FormBuilder, SubmitButton, FormSubmitState } from 'react-config-form';
+
+const handleSubmit = async(form: FormSubmitState) => {
+  await new Promise(resolve => setTimeout(() => {
+    console.log(form);
+    resolve("form submitted!");
+  }, 500));
+}
+
+<FormBuilder
+  config ={...some config}
+  onSubmit={handleSubmit}
+>
+  <SubmitButton />
+</FormBuilder>
+```
+
+### Errors and validation
+
+Error handling & validation are important aspects of any form. **react-config-form**
+provides a way to specify form inputs as <HighlightedText text="required" color="red" showBackticks />,
+which means an user can't submit the form without providing a valid value for that input.
+Now, HTML can handle this for a lot of input types, but it's necessary to use a custom logic
+on top of that for properly validating all input types and taking care of edge cases.
+
+_As custom validation for inputs can be very useful, that is a high priority feature for next releases_.
+
+Here's a playground for you to play around with the errors and validation stuff we currently have:
+
+<Playground
+  title="react-config-form-errors"
+  src="https://codesandbox.io/embed/rcf-errors-pg-41b4s4?autoresize=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2FForm.tsx&theme=dark"
+/>
+
+### A11y and responsiveness
+
+All forms built with react-config-form are **fully keyboard accessible** and **responsive**
+by default.
+
+_If you find any issues with any feature mentioned above, please raise an [issue](https://github.com/Sreejit7/react-config-form/issues/new) on Github_.
+
+PS: _Some new features will be rolled out in the next releases, keep checking this space!_

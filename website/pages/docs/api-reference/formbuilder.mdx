@@ -1,0 +1,112 @@
+import Meta from '../../../components/Meta.tsx';
+import InlineCode from '../../../components/InlineCode.tsx';
+import HighlightedText from '../../../components/HighlightedText.tsx';
+import Playground from '../../../components/Playground.tsx';
+
+export const meta = {
+  title: 'API Reference | FormBuilder',
+  desc: 'API reference for the FormBuilder component of react-config-form',
+  author: 'Sreejit De',
+};
+
+<Meta meta={meta} />
+
+# FormBuilder
+
+**\<FormBuilder />** is the main component to which you pass the form config and other
+props (like the submission handler), to render a form. Here's a very simple example:
+
+```tsx
+import { FormBuilder } from 'react-config-form';
+
+const ExampleForm = () => {
+  const formConfig = [
+    {
+      label: 'Do you wish creating forms was easier in React?',
+      initialValue: '',
+      type: 'radio',
+      options: ['yes', 'yessss', 'hell yesss!'],
+    },
+  ];
+
+  const handleFormSubmit = submittedForm => {
+    console.log('Use react-config-forms!');
+    // do something with submittedForm
+  };
+
+  return (
+    <FormBuilder config={formConfig} onSubmit={handleFormSubmit}>
+      <button type="submit">Show me how!</button>
+    </FormBuilder>
+  );
+};
+```
+
+### Props
+
+Here's a list of all the props you can pass in to FormBuilder:
+
+_Required props are marked as **bold**_
+
+- **<HighlightedText text="config" showBackticks />**: <InlineCode text="Array" /> - An array of config objects for all form input fields.
+
+  Each object in the config array can have these properties for configuring a form input:
+
+  _Required properties are marked as **bold**_
+
+  - **<HighlightedText text="label" color="#19a093" showBackticks />**: <InlineCode text="string" /> - The label for the input. The label is used as a key for storing values in the form state on submission.
+  - **<HighlightedText text="type" color="#19a093" showBackticks />**: <InlineCode text="all input types" /> | <InlineCode text="textarea" /> | <InlineCode text="dropdown" /> - The type for the input. (Like - "text", "email" etc).There are two custom types as of now - "textarea" & "dropdown". [**All input types are not tested, some input types may show unexpected behaviours**]
+  - <HighlightedText
+      text="initialValue"
+      color="#19a093"
+      showBackticks
+    />: As per the type - initialValue for the input. [Not required for types like "file" & "dropdown"]
+  - <HighlightedText text="required" color="#19a093" showBackticks />:
+    <InlineCode text="boolean" /> - Boolean denoting whether a value is required for the input.
+  - <HighlightedText text="options" color="#19a093" showBackticks />:
+    <InlineCode text="boolean" /> - A list of options for the input. Required for selective inputslike "dropdown" or "radio".
+  - <HighlightedText text="checked" color="#19a093" showBackticks />:
+    <InlineCode text="boolean" /> - Boolean denoting the condition when a field should be checked/filled. [Useful for "checkbox"/"radio" type inputs]
+  - <HighlightedText text="size" color="#19a093" showBackticks />:
+    <InlineCode text="small" /> |
+    <InlineCode text="medium" /> |
+    <InlineCode text="large" /> - Specifies the size of the input. [Default value - "medium"]
+  - <HighlightedText text="placeholder" color="#19a093" showBackticks />:
+    <InlineCode text="string" /> - A placeholder for the input.
+  - <HighlightedText text="onChange" color="#19a093" showBackticks />:
+    <InlineCode text="Function" /> - A callback for that gets called with the current input valuewhenever the input is changed. [Avoid using it for managing state for the form to avoid multiple sources of truth]
+  - <HighlightedText text="className" color="#19a093" showBackticks />:
+    <InlineCode text="strinng" /> - A string that includes class(es) to be attached with the input.
+  - <HighlightedText text="styles" color="#19a093" showBackticks />:
+    <InlineCode text="Object" /> - A style object that includes styles for the input.
+  - <HighlightedText text="labelClass" color="#19a093" showBackticks />:
+    <InlineCode text="string" /> - A string that includes class(es) to be attached with the label.
+  - <HighlightedText text="groupClass" color="#19a093" showBackticks />:
+    <InlineCode text="string" /> - A string that includes class(es) to be attached with the form group (label and input box).
+  - <HighlightedText text="groupHeader" color="#19a093" showBackticks />:
+    <InlineCode text="JSX Element" /> - A header element for a particular form group. [This effectively makes dividing a form into multiple sections possible]
+  - <HighlightedText text="groupFooter" color="#19a093" showBackticks />:
+    <InlineCode text="JSX Element" /> - A footer element for a particular form group.
+
+* **<HighlightedText text="onSubmit" showBackticks />**: <InlineCode text="Function" /> - A callback function that takes the form state as an argument and
+  gets called when the form is submitted.
+* <HighlightedText text="formHeader" showBackticks />:
+  <InlineCode text="JSX Element" /> - A JSX Element that gets rendered above the actual form.
+* <HighlightedText text="formClass" showBackticks />:
+  <InlineCode text="string" /> - A string that includes class(es) to be attached with the form.
+* <HighlightedText text="formStyles" showBackticks />:
+  <InlineCode text="Object" /> - A style object that includes styles for the form.
+* <HighlightedText text="containerClass" showBackticks />:
+  <InlineCode text="string" /> - A string that includes class(es) to be attached withthe form container.
+* <HighlightedText text="children" showBackticks />:
+  <InlineCode text="ReactNode" /> - React Elements (like a Submit button) that gets rendered beneath the form body (all the form fields).
+
+### Playground
+
+Here's a CodeSandbox playground, so you can play around with <InlineCode text="<FormBuilder>" />
+and all it's different props.
+
+<Playground
+  src="https://codesandbox.io/embed/react-config-form-docs-pg-im691j?autoresize=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2Fplaygrounds%2FFormBuilderPG.tsx&theme=dark"
+  title="formbuilder-pg"
+/>
