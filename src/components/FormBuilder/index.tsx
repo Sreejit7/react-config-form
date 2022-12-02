@@ -3,8 +3,10 @@ import {
   FormBuilderProps,
   FormInputConfig,
   FormInputType,
+  FormInputValue,
   FormState,
   FormSubmitState,
+  Validator,
 } from './FormBuilder.types';
 import './formStyles.css';
 
@@ -40,7 +42,7 @@ const FormBuilder = ({
             ? initialValue
             : '',
         touched: false,
-        error: false,
+        errors: [],
       };
     }
 
@@ -68,7 +70,8 @@ const FormBuilder = ({
   ) => {
     const currInputvalue = getValue(e, type);
 
-    if (typeof onChange === 'function') {
+    // TO-DO: remember to remove required if not used
+    if (typeof onChange === 'function' && required) {
       onChange(currInputvalue);
     }
 
@@ -78,14 +81,16 @@ const FormBuilder = ({
         [label]: {
           ...prevFormState[label],
           value: currInputvalue,
-          error:
-            required &&
-            prevFormState[label]?.touched &&
-            typeof currInputvalue !== 'boolean' &&
-            type !== 'number' &&
-            // special check for dropdown, if value is `- None -`, mark an error state
-            (!currInputvalue ||
-              (type === 'dropdown' && currInputvalue === '- None -')),
+          // errors:
+          //   required &&
+          //   prevFormState[label]?.touched &&
+          //   typeof currInputvalue !== 'boolean' &&
+          //   type !== 'number' &&
+          //   // special check for dropdown, if value is `- None -`, mark an error state
+          //   (!currInputvalue ||
+          //     (type === 'dropdown' && currInputvalue === '- None -'))
+          //     ? [`Please fill ${label}`]
+          //     : [],
         },
       }));
     });
@@ -102,48 +107,36 @@ const FormBuilder = ({
     required = false,
     label: string,
     e: React.FocusEvent<HTMLInputElement>,
-    type: FormInputType
+    type: FormInputType,
+    validators: Validator[]
   ) => {
     const value = getValue(e, type);
 
-    if (!formState[label]?.touched) {
-      setFormState(prevFormState => ({
-        ...prevFormState,
-        [label]: {
-          ...prevFormState[label],
-          touched: true,
-          error:
-            required &&
-            typeof value !== 'boolean' &&
-            type !== 'number' &&
-            // special check for dropdown, if value is `- None -`, mark an error state
-            (!value || (type === 'dropdown' && value === '- None -')),
-        },
-      }));
-    } else {
-      if (required) {
-        if (
-          typeof value !== 'boolean' &&
-          type !== 'number' &&
-          // special check for dropdown, if value is `- None -`, mark an error state
-          (!value || (type === 'dropdown' && value === '- None -'))
-        ) {
-          setFormState(prevFormState => ({
-            ...prevFormState,
-            [label]: {
-              ...prevFormState[label],
-              error: true,
-            },
-          }));
-        }
-      }
-    }
+    let errors = getInputValidationErrors(
+      label,
+      value,
+      validators,
+      formState[label]?.errors || [],
+      type,
+      required
+    );
+
+    setFormState(prevFormState => ({
+      ...prevFormState,
+      [label]: {
+        ...prevFormState[label],
+        touched: !prevFormState[label]?.touched
+          ? true
+          : prevFormState[label]?.touched,
+        errors: errors,
+      },
+    }));
 
     // reset form level error
     if (formError) {
       startTransition(() => {
         const errorExists = Object.values(formState).some(
-          label => label?.error
+          label => label?.errors && label?.errors.length > 0
         );
         setformError(errorExists);
       });
@@ -162,9 +155,9 @@ const FormBuilder = ({
     // validate the form & create form submission state
     for (const { label, required = false, initialValue, type } of config) {
       if (required) {
-        const { touched, error, value } = formState[label];
+        const { touched, errors, value } = formState[label];
 
-        if (touched && error) {
+        if (touched && errors && errors?.length > 0) {
           // prevent submission in case of an error
           setformError(true);
           return;
@@ -184,7 +177,7 @@ const FormBuilder = ({
               ...prevFormState,
               [label]: {
                 ...prevFormState[label],
-                error: true,
+                errors: [`Please update ${label}`],
               },
             }));
 
@@ -231,6 +224,7 @@ const FormBuilder = ({
       options = [],
       styles,
       placeholder = '',
+      validators = [],
     }: Partial<FormInputConfig>
   ) => {
     switch (type) {
@@ -258,7 +252,9 @@ const FormBuilder = ({
                 onChange={e =>
                   handleFormChange(label, e, type, required, onChange)
                 }
-                onBlur={e => handleInputBlur(required, label, e, type)}
+                onBlur={e =>
+                  handleInputBlur(required, label, e, type, validators)
+                }
               />
               {option}
             </label>
@@ -297,7 +293,8 @@ const FormBuilder = ({
                   required,
                   label,
                   (e as unknown) as React.FocusEvent<HTMLInputElement>,
-                  type
+                  type,
+                  validators
                 )
               }
             >
@@ -353,7 +350,8 @@ const FormBuilder = ({
                 required,
                 label,
                 (e as unknown) as React.FocusEvent<HTMLInputElement>,
-                type
+                type,
+                validators
               )
             }
             rows={size === 'medium' ? 6 : size === 'large' ? 8 : 4}
@@ -370,7 +368,7 @@ const FormBuilder = ({
             id={`${formId}-${label}`}
             type="file"
             onChange={e => handleFormChange(label, e, type, required, onChange)}
-            onBlur={e => handleInputBlur(required, label, e, type)}
+            onBlur={e => handleInputBlur(required, label, e, type, validators)}
             required={required}
           />
         );
@@ -397,7 +395,7 @@ const FormBuilder = ({
             }
             placeholder={placeholder}
             onChange={e => handleFormChange(label, e, type, required, onChange)}
-            onBlur={e => handleInputBlur(required, label, e, type)}
+            onBlur={e => handleInputBlur(required, label, e, type, validators)}
             required={required}
           />
         );
@@ -429,6 +427,50 @@ const FormBuilder = ({
       default:
         return e.target.value;
     }
+  };
+
+  const getInputValidationErrors = (
+    label: string,
+    value: FormInputValue | File,
+    validators: Validator[],
+    errors: string[],
+    type: FormInputType,
+    required = false
+  ) => {
+    let updatedErrors: string[] = [...errors];
+
+    // If input is required, handle the error behavior
+    if (required) {
+      const requiredInputMissing = updatedErrors[0] !== `Please fill ${label}`;
+      if (
+        typeof value !== 'boolean' &&
+        type !== 'number' &&
+        // special check for dropdown, if value is `- None -`, mark an error state
+        (!value || (type === 'dropdown' && value === '- None -')) &&
+        requiredInputMissing
+      ) {
+        updatedErrors.unshift(`Please fill ${label}`);
+      } else if (!requiredInputMissing) {
+        // remove the error
+        updatedErrors.shift();
+      }
+    }
+
+    validators.forEach(validator => {
+      const { validated, errorMessage } = validator(value);
+      const errorIndex = errors.findIndex(err => err === errorMessage);
+
+      // if input is valid & error is present, remove the error
+      if (validated && errorIndex !== -1) {
+        updatedErrors.splice(errorIndex, 1);
+      }
+      // if input is invalid & error isn't present, add the error
+      else if (!validated && errorIndex === -1) {
+        updatedErrors = [...updatedErrors, errorMessage];
+      }
+    });
+
+    return updatedErrors;
   };
 
   return (
@@ -468,18 +510,19 @@ const FormBuilder = ({
                 {required && <span className="form-required">*</span>}
               </label>
               {renderInput(type, { label, required, ...inputProps })}
-              {formState[label]?.error && (
-                <small className="form-group-error">
-                  Please {type === 'file' ? 'upload' : 'fill'} {label}
+              {formState[label]?.errors?.map(err => (
+                <small key={err} className="form-group-error">
+                  {/* Please {type === 'file' ? 'upload' : 'fill'} {label} */}
+                  {err}
                 </small>
-              )}
+              ))}
               {groupFooter}
             </section>
           )
         )}
         {formError && (
           <small className="form-group-error">
-            Please fill all required fields!
+            Please update all required fields!
           </small>
         )}
         {children}

@@ -1,0 +1,106 @@
+import Meta from '../../components/Meta.tsx';
+
+export const meta = {
+  title: 'Usage | react-config-form',
+  desc: 'How to use react-config-form in your project',
+  author: 'Sreejit De',
+};
+
+<Meta meta={meta} />
+
+# Usage
+
+Here's how you can get started with using react-config-form in your project.
+
+## Minimum working setup
+
+This section shows a minimum working setup for creating a Login Form with just two fields
+using react-config-form.
+
+```tsx
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import {
+  FormBuilder,
+  SubmitButton,
+  FormInputConfig,
+  FormSubmitState,
+} from 'react-config-form';
+// This stylesheet contains the default styling for the form
+import 'react-config-form/dist/react-config-form.cjs.development.css';
+
+const LoginForm = () => {
+  const loginFormConfig: FormInputConfig[] = [
+    {
+      label: 'Username',
+      initialValue: '',
+      type: 'text',
+      required: true,
+    },
+    {
+      label: 'Password',
+      initialValue: '',
+      type: 'password',
+      required: true,
+    },
+  ];
+
+  const handleLoginFormSubmit = (form: FormSubmitState) => {
+    console.log(form);
+  };
+
+  return (
+    <FormBuilder config={loginFormConfig} onSubmit={handleLoginFormSubmit}>
+      <SubmitButton text="Login" />
+    </FormBuilder>
+  );
+};
+
+const root = createRoot(document.getElementById('root')!);
+root.render(<LoginForm />);
+```
+
+## Styling your forms
+
+react-config-form provides some optional **minimal default styles** for your forms.
+This is to make you spend less time on configuring basic styles for forms, so you
+can just add custom styles on top of the defaults and quickly get done with it.
+
+You can customize the styles for a form in multiple ways:
+
+### 1. Default styles
+
+You can choose to use the minimal default styles that come with this package,
+hence writing less css for your forms.
+
+Just include this line in your form component:
+
+```jsx
+import 'react-config-form/dist/react-config-form.cjs.development.css';
+```
+
+### 2. Use your own custom styles together with default styles
+
+Most times, you'll probably want to use custom styles for your form,
+but **not start from scratch** _([like these examples](https://formbuildr.vercel.app/examples))_.
+You can use both, the default styles and your custom styles,
+overriding some default styles through the [config](), [props]() or
+[global classnames](). _Global classnames are especially useful for re-using same styles for multiple or all forms across your app._
+
+```jsx
+// Import stylesheets in this order
+import 'react-config-form/dist/react-config-form.cjs.development.css';
+import 'path-to-your-custom-css-1';
+import 'path-to-your-custom-css-2';
+// ... and so on.
+```
+
+**The ordering of the imports are important since you want to override the default styles with the custom ones.**
+
+### 3. Just use custom styles
+
+If you just want to use your custom styles, you can create your own styles for a form
+through the [global classnames]() or by passing in custom classnames
+through the [config]() or [props]().
+
+**No need to import the default css.**
