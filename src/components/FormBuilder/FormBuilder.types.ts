@@ -5,7 +5,6 @@ export interface FormInputConfig {
   initialValue?: FormInputValue;
   checked?: boolean;
   onChange?: ((value: FormInputValue) => void) | any;
-  validators?: Validator[];
   className?: string;
   styles?: React.CSSProperties;
   type: FormInputType;
@@ -34,7 +33,7 @@ export interface FormBuilderProps {
 export interface FormState {
   [key: string]: {
     value: FormInputValue | File;
-    errors?: string[];
+    error?: boolean;
     touched?: boolean;
   };
 }
@@ -50,14 +49,6 @@ export type FormInputType =
   | 'textarea'
   | 'dropdown';
 
-export type FormInputValue = string | number | boolean | undefined;
+type FormInputValue = string | number | boolean | undefined;
 
 type FormInputSize = 'large' | 'medium' | 'small';
-
-/** Type for an input validator function */
-export type Validator = (
-  value: FormInputValue | File
-) => {
-  validated: boolean;
-  errorMessage: string;
-};

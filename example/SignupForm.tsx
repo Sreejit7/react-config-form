@@ -18,25 +18,17 @@ const SignUpForm = ({ onSignUp }: Props) => {
       initialValue: '',
       type: 'text',
       required: true,
-      validators: [
-        value => ({
-          validated: value !== 'Sreejit7' && value !== 'samsam',
-          errorMessage: 'user exists!',
-        }),
-      ],
     },
     {
       label: 'Password',
       initialValue: '',
       type: 'password',
       required: true,
-      validators: [],
     },
     {
       label: 'Remember Me',
       initialValue: false,
       type: 'checkbox',
-      validators: [],
     },
   ];
 
